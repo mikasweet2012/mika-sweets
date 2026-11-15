@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#2BB5A6">
+<title>Mika Sweets</title>
+<link rel="icon" href="logo.png">
+<link rel="apple-touch-icon" href="logo.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@400;600;700&display=swap" rel="stylesheet">
+<script>
+/* =====================================================================
+   ⚙️  CONFIGURAÇÕES — EDITE AQUI
+   ===================================================================== */
+const LOJA = {
+  nome: "Mika Sweets",
+  slogan: "Feitos com carinho, entregues com amor",
+  // Seu WhatsApp com DDI 55 + DDD + número, só números. Ex: 5511987654321
+  whatsapp: "5512981165882",
+  pedidoMinimo: 0,            // valor mínimo do pedido (0 = sem mínimo)
+  formasPagamento: ["Pix", "Dinheiro"],
+  horario: "Seg a Sáb • 9h às 19h"
+};
+
+/* 🍬 SEUS PRODUTOS
+   - imagem: pode ser um link de foto (https://...) ou deixar "" para usar o emoji
+   - unidade: como o produto é vendido (un, cento, caixa, fatia...)            */
+const PRODUTOS = [
+  { id: 1,  nome: "Brigadeiro Tradicional", descricao: "Chocolate belga e granulado crocante.", preco: 2.50,  unidade: "un",       categoria: "Docinhos", emoji: "🍫", imagem: "", destaque: true },
+  { id: 2,  nome: "Beijinho",               descricao: "Coco fresco com cravo.",                preco: 2.50,  unidade: "un",       categoria: "Docinhos", emoji: "🥥", imagem: "" },
+  { id: 3,  nome: "Brigadeiro de Ninho",    descricao: "Leite Ninho com Nutella no recheio.",   preco: 3.00,  unidade: "un",       categoria: "Docinhos", emoji: "🍼", imagem: "", destaque: true },
+  { id: 4,  nome: "Cento de Docinhos",      descricao: "100 docinhos sortidos para sua festa.", preco: 180.00, unidade: "cento",   categoria: "Docinhos", emoji: "🎉", imagem: "" },
+  { id: 5,  nome: "Bolo de Pote Ninho c/ Morango", descricao: "Massa fofinha, creme de Ninho e morangos.", preco: 14.00, unidade: "pote", categoria: "Bolos", emoji: "🍓", imagem: "", destaque: true },
+  { id: 6,  nome: "Bolo de Pote Chocolate", descricao: "Massa de chocolate com brigadeiro cremoso.", preco: 13.00, unidade: "pote",  categoria: "Bolos",    emoji: "🍰", imagem: "" },
+  { id: 7,  nome: "Bolo Vulcão",            descricao: "Bolo de cenoura com cobertura de chocolate escorrendo.", preco: 55.00, unidade: "un", categoria: "Bolos", emoji: "🎂", imagem: "" },
+  { id: 8,  nome: "Brownie",                descricao: "Casquinha crocante e meio molhadinho.", preco: 8.00,  unidade: "un",       categoria: "Tortas & Brownies", emoji: "🟫", imagem: "" },
+  { id: 9,  nome: "Torta de Limão (fatia)", descricao: "Base crocante, creme azedinho e merengue.", preco: 12.00, unidade: "fatia", categoria: "Tortas & Brownies", emoji: "🍋", imagem: "" },
+  { id: 10, nome: "Pudim de Leite",         descricao: "Lisinho, sem furinhos, calda dourada.", preco: 45.00, unidade: "un",       categoria: "Tortas & Brownies", emoji: "🍮", imagem: "" },
+  { id: 11, nome: "Cookie Gotas de Chocolate", descricao: "Grande, crocante por fora e macio por dentro.", preco: 7.00, unidade: "un", categoria: "Cookies", emoji: "🍪", imagem: "" },
+  { id: 12, nome: "Caixa Presente (6 doces)", descricao: "Caixinha decorada com 6 doces gourmet.", preco: 25.00, unidade: "caixa", categoria: "Presentes", emoji: "🎁", imagem: "", destaque: true }
+];
+</script>
+<style>
+:root{
+  --agua:#2BB5A6; --agua-escuro:#1A8C80; --agua-claro:#D6F5F1; --agua-bg:#F0FBF9;
+  --texto:#1F3B38; --texto-suave:#5E7C78; --branco:#fff; --rosa:#FF7A9A;
+  --sombra:0 4px 18px rgba(26,140,128,.12); --raio:18px;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{font-family:'Nunito',system-ui,sans-serif;background:var(--agua-bg);color:var(--texto);padding-bottom:96px}
+h1,h2,h3,.fredoka{font-family:'Fredoka',sans-serif}
+button{font-family:inherit;cursor:pointer;border:none}
+
+/* Topo */
+header{background:linear-gradient(135deg,var(--agua),#5FD3C4);color:#fff;padding:28px 16px 56px;text-align:center;border-radius:0 0 32px 32px;position:relative}
+.logo{width:160px;height:160px;border-radius:50%;background:#fff;overflow:hidden;margin:0 auto 12px;box-shadow:0 6px 18px rgba(0,0,0,.12);border:4px solid rgba(255,255,255,.7)}
+.logo img{width:100%;height:100%;object-fit:cover;transform:scale(1.12)}
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+header h1{font-size:1.9rem;font-weight:700}
+header p{opacity:.95;margin-top:4px}
+.horario{display:inline-block;margin-top:10px;background:rgba(255,255,255,.22);padding:4px 12px;border-radius:99px;font-size:.85rem;font-weight:600}
+
+/* Busca + categorias */
+.wrap{max-width:960px;margin:0 auto;padding:0 16px}
+.busca{margin-top:-26px;position:relative}
+.busca input{width:100%;padding:14px 18px 14px 46px;border-radius:99px;border:none;font-size:1rem;box-shadow:var(--sombra);outline:none;font-family:inherit;color:var(--texto)}
+.busca input:focus{box-shadow:0 0 0 3px var(--agua-claro),var(--sombra)}
+.busca span{position:absolute;left:18px;top:50%;transform:translateY(-50%);font-size:1.1rem}
+.cats{display:flex;gap:8px;overflow-x:auto;padding:18px 0 6px;scrollbar-width:none}
+.cats::-webkit-scrollbar{display:none}
+.cat{flex-shrink:0;padding:8px 16px;border-radius:99px;background:#fff;color:var(--agua-escuro);font-weight:700;font-size:.9rem;box-shadow:0 2px 8px rgba(26,140,128,.08);transition:.2s}
+.cat.ativo{background:var(--agua);color:#fff}
+
+/* Produtos */
+.secao{margin:22px 0 12px;font-size:1.3rem;color:var(--agua-escuro)}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:14px}
+.card{background:#fff;border-radius:var(--raio);overflow:hidden;box-shadow:var(--sombra);display:flex;flex-direction:column;transition:transform .2s}
+.card:active{transform:scale(.98)}
+.foto{aspect-ratio:1/1;background:var(--agua-claro);display:grid;place-items:center;font-size:64px;position:relative}
+.foto img{width:100%;height:100%;object-fit:cover}
+.selo{position:absolute;top:10px;left:10px;background:var(--rosa);color:#fff;font-size:.72rem;font-weight:700;padding:3px 9px;border-radius:99px}
+.info{padding:12px;display:flex;flex-direction:column;flex:1}
+.info h3{font-size:1rem;font-weight:600;line-height:1.2}
+.info p{font-size:.82rem;color:var(--texto-suave);margin:4px 0 10px;flex:1}
+.rodape-card{display:flex;align-items:center;justify-content:space-between;gap:6px}
+.preco{font-weight:700;color:var(--agua-escuro);font-size:1.05rem}
+.preco small{font-weight:600;color:var(--texto-suave);font-size:.72rem}
+.add{width:36px;height:36px;border-radius:50%;background:var(--agua);color:#fff;font-size:1.4rem;line-height:1;display:grid;place-items:center;flex-shrink:0}
+.qtd{display:flex;align-items:center;gap:6px;background:var(--agua-claro);border-radius:99px;padding:3px}
+.qtd button{width:28px;height:28px;border-radius:50%;background:#fff;color:var(--agua-escuro);font-weight:700;font-size:1.1rem}
+.qtd span{min-width:18px;text-align:center;font-weight:700}
+.vazio{text-align:center;color:var(--texto-suave);padding:40px 0}
+
+/* Barra do carrinho */
+.barra{position:fixed;left:16px;right:16px;bottom:16px;max-width:928px;margin:0 auto;background:var(--agua-escuro);color:#fff;border-radius:99px;padding:12px 14px 12px 22px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 8px 24px rgba(26,140,128,.35);transform:translateY(140%);transition:transform .3s;z-index:20}
+.barra.show{transform:none}
+.barra b{font-size:1.05rem}
+.barra button{background:#fff;color:var(--agua-escuro);font-weight:700;padding:10px 18px;border-radius:99px;font-size:.95rem}
+
+/* Painel */
+.fundo{position:fixed;inset:0;background:rgba(15,40,37,.45);opacity:0;pointer-events:none;transition:.25s;z-index:30}
+.fundo.show{opacity:1;pointer-events:auto}
+.painel{position:fixed;left:0;right:0;bottom:0;max-width:560px;margin:0 auto;background:#fff;border-radius:26px 26px 0 0;max-height:92vh;overflow-y:auto;transform:translateY(100%);transition:transform .3s;z-index:40;padding:8px 18px 24px}
+.painel.show{transform:none}
+.alca{width:44px;height:5px;background:#D5E4E2;border-radius:9px;margin:6px auto 14px}
+.painel h2{color:var(--agua-escuro);display:flex;justify-content:space-between;align-items:center}
+.fechar{background:var(--agua-claro);color:var(--agua-escuro);width:34px;height:34px;border-radius:50%;font-size:1.1rem}
+.item{display:flex;align-items:center;gap:10px;padding:12px 0;border-bottom:1px solid #EEF4F3}
+.item .mini{width:46px;height:46px;border-radius:12px;background:var(--agua-claro);display:grid;place-items:center;font-size:24px;flex-shrink:0;overflow:hidden}
+.item .mini img{width:100%;height:100%;object-fit:cover}
+.item .nm{flex:1;font-weight:600;font-size:.92rem}
+.item .nm small{display:block;color:var(--texto-suave);font-weight:600}
+form{margin-top:16px;display:grid;gap:12px}
+label{font-weight:700;font-size:.88rem;display:grid;gap:5px}
+input,textarea,select{padding:12px 14px;border:2px solid #E1EEEC;border-radius:12px;font-size:1rem;font-family:inherit;color:var(--texto);background:#fff;outline:none;width:100%}
+input:focus,textarea:focus,select:focus{border-color:var(--agua)}
+.opcoes{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.opcoes input{display:none}
+.opcoes label{border:2px solid #E1EEEC;border-radius:12px;padding:12px;text-align:center;cursor:pointer;display:block;font-weight:700}
+.opcoes input:checked+label{border-color:var(--agua);background:var(--agua-claro);color:var(--agua-escuro)}
+.resumo{background:var(--agua-bg);border-radius:14px;padding:14px;display:grid;gap:6px;font-size:.95rem}
+.resumo div{display:flex;justify-content:space-between}
+.resumo .total{font-weight:700;font-size:1.15rem;color:var(--agua-escuro);border-top:1px dashed #BFE3DE;padding-top:8px;margin-top:2px}
+.btn-zap{background:#25D366;color:#fff;font-weight:700;font-size:1.05rem;padding:16px;border-radius:99px;display:flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 6px 18px rgba(37,211,102,.35)}
+.btn-zap:disabled{background:#A9C9C5;box-shadow:none}
+.aviso{color:#C2410C;font-size:.85rem;font-weight:700;text-align:center}
+.hide{display:none!important}
+footer{text-align:center;color:var(--texto-suave);font-size:.85rem;padding:30px 16px}
+.toast{position:fixed;top:16px;left:50%;transform:translate(-50%,-150%);background:var(--texto);color:#fff;padding:10px 18px;border-radius:99px;font-weight:700;font-size:.9rem;transition:.3s;z-index:50}
+.toast.show{transform:translate(-50%,0)}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><img src="logo.png" alt="Mika Sweets"></div>
+  <h1 id="nomeLoja" class="sr-only"></h1>
+  <p id="slogan"></p>
+  <span class="horario" id="horario"></span>
+</header>
+
+<main class="wrap">
+  <div class="busca"><span>🔍</span><input id="busca" type="search" placeholder="Buscar doces..."></div>
+  <nav class="cats" id="cats"></nav>
+  <div id="catalogo"></div>
+</main>
+
+<footer id="rodape"></footer>
+
+<div class="barra" id="barra">
+  <div><small id="barraQtd"></small><br><b id="barraTotal"></b></div>
+  <button onclick="abrirPainel()">Ver carrinho 🛒</button>
+</div>
+
+<div class="fundo" id="fundo" onclick="fecharPainel()"></div>
+<section class="painel" id="painel" aria-label="Carrinho">
+  <div class="alca"></div>
+  <h2>Seu pedido <button class="fechar" onclick="fecharPainel()" aria-label="Fechar">✕</button></h2>
+  <div id="itens"></div>
+
+  <form id="form" onsubmit="enviar(event)">
+    <label>Seu nome<input id="nome" required placeholder="Como podemos te chamar?" autocomplete="name"></label>
+    <label>Sua turma / sala (opcional)<input id="turma" placeholder="Ex: 8º ano B"></label>
+    <label>Pagamento<select id="pagamento"></select></label>
+    <label>Observações<textarea id="obs" rows="2" placeholder="Algum recado? Ex: sem granulado, é para presente..."></textarea></label>
+
+    <div class="resumo">
+      <div class="total"><span>Total</span><span id="total"></span></div>
+    </div>
+    <p class="aviso hide" id="avisoMin"></p>
+    <button class="btn-zap" id="btnZap" type="submit">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="#fff"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm0 18.2c-1.5 0-3-.4-4.3-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8-.2-.1-.4-.1-.6.1l-.8 1c-.1.2-.3.2-.5.1-.7-.3-1.4-.7-2-1.3-.5-.5-1-1.1-1.3-1.7-.1-.2 0-.4.1-.5l.4-.5.3-.4v-.5l-.8-1.9c-.2-.5-.4-.4-.6-.4h-.5c-.2 0-.5.1-.7.3-.6.6-.9 1.4-.9 2.2.1 1 .5 1.9 1.1 2.7 1.1 1.6 2.5 2.9 4.2 3.7 1.6.6 2.2.7 3 .5.5-.1 1.4-.6 1.6-1.2.2-.5.2-1 .1-1.1l-.4-.1z"/></svg>
+      Enviar pedido pelo WhatsApp
+    </button>
+  </form>
+</section>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const brl = v => v.toLocaleString("pt-BR",{style:"currency",currency:"BRL"});
+const $ = id => document.getElementById(id);
+let carrinho = {};
+let categoriaAtiva = "Todos";
+
+try { carrinho = JSON.parse(localStorage.getItem("carrinho-doces")) || {}; } catch(e) { carrinho = {}; }
+const salvar = () => { try { localStorage.setItem("carrinho-doces", JSON.stringify(carrinho)); } catch(e) {} };
+
+function fotoHTML(p){ return p.imagem ? `<img src="${p.imagem}" alt="${p.nome}" loading="lazy">` : p.emoji; }
+
+function init(){
+  document.title = LOJA.nome;
+  $("nomeLoja").textContent = LOJA.nome;
+  $("slogan").textContent = LOJA.slogan;
+  $("horario").textContent = "🕒 " + LOJA.horario;
+  $("rodape").innerHTML = `${LOJA.nome} • Pedidos pelo WhatsApp 💚`;
+  $("pagamento").innerHTML = LOJA.formasPagamento.map(f=>`<option>${f}</option>`).join("");
+  const cats = ["Todos", ...new Set(PRODUTOS.map(p=>p.categoria))];
+  $("cats").innerHTML = cats.map(c=>`<button class="cat${c==="Todos"?" ativo":""}" data-cat="${c}">${c}</button>`).join("");
+  $("cats").onclick = e => {
+    const b = e.target.closest(".cat"); if(!b) return;
+    categoriaAtiva = b.dataset.cat;
+    document.querySelectorAll(".cat").forEach(x=>x.classList.toggle("ativo", x===b));
+    renderCatalogo();
+  };
+  $("busca").oninput = renderCatalogo;
+  renderCatalogo(); atualizarTudo();
+}
+
+function controle(p){
+  const q = carrinho[p.id] || 0;
+  return q ? `<div class="qtd"><button onclick="mudar(${p.id},-1)">−</button><span>${q}</span><button onclick="mudar(${p.id},1)">+</button></div>`
+           : `<button class="add" onclick="mudar(${p.id},1)" aria-label="Adicionar ${p.nome}">+</button>`;
+}
+
+function renderCatalogo(){
+  const termo = $("busca").value.trim().toLowerCase();
+  const lista = PRODUTOS.filter(p =>
+    (categoriaAtiva==="Todos" || p.categoria===categoriaAtiva) &&
+    (!termo || (p.nome+" "+p.descricao).toLowerCase().includes(termo)));
+  if(!lista.length){ $("catalogo").innerHTML = `<p class="vazio">Nenhum doce encontrado 😢</p>`; return; }
+  const grupos = {};
+  lista.forEach(p => (grupos[p.categoria] ||= []).push(p));
+  $("catalogo").innerHTML = Object.entries(grupos).map(([cat, ps]) => `
+    <h2 class="secao">${cat}</h2>
+    <div class="grid">${ps.map(p=>`
+      <article class="card">
+        <div class="foto">${fotoHTML(p)}${p.destaque?'<span class="selo">⭐ Favorito</span>':''}</div>
+        <div class="info">
+          <h3>${p.nome}</h3><p>${p.descricao}</p>
+          <div class="rodape-card">
+            <span class="preco">${brl(p.preco)} <small>/${p.unidade}</small></span>
+            <span id="ctl-${p.id}">${controle(p)}</span>
+          </div>
+        </div>
+      </article>`).join("")}
+    </div>`).join("");
+}
+
+function mudar(id, d){
+  const q = (carrinho[id]||0) + d;
+  if(q<=0) delete carrinho[id]; else carrinho[id]=q;
+  if(d>0 && q===1) toast("Adicionado ao carrinho 🍬");
+  salvar();
+  const ctl = $("ctl-"+id); if(ctl) ctl.innerHTML = controle(PRODUTOS.find(p=>p.id===id));
+  atualizarTudo();
+}
+
+function calc(){
+  const itens = Object.entries(carrinho).map(([id,q])=>({p:PRODUTOS.find(x=>x.id==id),q})).filter(i=>i.p);
+  const qtd = itens.reduce((s,i)=>s+i.q,0);
+  const subtotal = itens.reduce((s,i)=>s+i.p.preco*i.q,0);
+  return {itens,qtd,subtotal,total:subtotal};
+}
+
+function atualizarTudo(){
+  const c = calc();
+  $("barra").classList.toggle("show", c.qtd>0);
+  $("barraQtd").textContent = `${c.qtd} ${c.qtd===1?"item":"itens"}`;
+  $("barraTotal").textContent = brl(c.subtotal);
+  $("itens").innerHTML = c.itens.length ? c.itens.map(({p,q})=>`
+    <div class="item"><div class="mini">${fotoHTML(p)}</div>
+      <div class="nm">${p.nome}<small>${brl(p.preco*q)}</small></div>
+      <div class="qtd"><button type="button" onclick="mudar(${p.id},-1)">−</button><span>${q}</span><button type="button" onclick="mudar(${p.id},1)">+</button></div>
+    </div>`).join("") : `<p class="vazio">Seu carrinho está vazio 🧁</p>`;
+  $("total").textContent = brl(c.total);
+  const abaixo = c.subtotal < LOJA.pedidoMinimo;
+  $("avisoMin").textContent = `Pedido mínimo: ${brl(LOJA.pedidoMinimo)}`;
+  $("avisoMin").classList.toggle("hide", !abaixo || !c.qtd);
+  $("btnZap").disabled = !c.qtd || abaixo;
+  if(!c.qtd) fecharPainel();
+}
+
+function abrirPainel(){ $("painel").classList.add("show"); $("fundo").classList.add("show"); }
+function fecharPainel(){ $("painel").classList.remove("show"); $("fundo").classList.remove("show"); }
+
+function toast(msg){ const t=$("toast"); t.textContent=msg; t.classList.add("show"); clearTimeout(t._t); t._t=setTimeout(()=>t.classList.remove("show"),1600); }
+
+function enviar(e){
+  e.preventDefault();
+  const c = calc(); if(!c.qtd) return;
+  const linhas = [
+    `🧁 *NOVO PEDIDO — ${LOJA.nome}*`, ``,
+    `👤 *Cliente:* ${$("nome").value.trim()}`, ``,
+    `🛒 *Itens:*`,
+    ...c.itens.map(({p,q})=>`• ${q}x ${p.nome} — ${brl(p.preco*q)}`), ``,
+    `💰 *Total: ${brl(c.total)}*`, ``,
+    `🏫 Entrega na escola`,
+    ...($("turma").value.trim() ? [`🎒 Turma/sala: ${$("turma").value.trim()}`] : []),
+    `💳 Pagamento: ${$("pagamento").value}`,
+    ...($("obs").value.trim() ? [``, `📝 Obs: ${$("obs").value.trim()}`] : [])
+  ];
+  window.open(`https://wa.me/${LOJA.whatsapp}?text=${encodeURIComponent(linhas.join("\n"))}`, "_blank");
+  carrinho = {}; salvar(); renderCatalogo(); atualizarTudo();
+  toast("Pedido enviado! Obrigado 💚");
+}
+
+init();
+</script>
+</body>
+</html>
